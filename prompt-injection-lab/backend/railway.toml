@@ -1,0 +1,16 @@
+# railway.toml — Flask backend service configuration
+# Place this file at the root of the `backend/` service in Railway.
+# Railway reads this to know how to build and deploy the service.
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Railway injects $PORT automatically; entrypoint.sh passes it to gunicorn.
+startCommand = "./entrypoint.sh"
+healthcheckPath = "/api/health"
+# Allow up to 10 minutes on first boot (model pull can be slow).
+healthcheckTimeout = 600
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

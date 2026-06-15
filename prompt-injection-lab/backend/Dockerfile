@@ -1,4 +1,4 @@
-# ─── Backend Dockerfile (single-stage) ───────────────────────────────────────
+# ─── Backend Dockerfile — Railway-compatible ──────────────────────────────────
 FROM python:3.12-slim
 
 LABEL description="Prompt Injection Lab — vulnerable LLM backend (education only)"
@@ -15,8 +15,14 @@ COPY app.py .
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
-# Static frontend files are mounted at /app/frontend/dist via docker-compose
+# Bundle the frontend directly into the image.
+# On Railway there are no bind mounts, so we COPY instead.
+COPY frontend/ /app/frontend/
+
+# Railway injects PORT at runtime; gunicorn reads it from entrypoint.sh.
+# We declare 5000 as a hint but the actual port is dynamic.
 EXPOSE 5000
+
 ENV PYTHONUNBUFFERED=1
 
 ENTRYPOINT ["./entrypoint.sh"]
