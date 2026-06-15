@@ -1,15 +1,13 @@
-# railway.toml — Ollama service configuration
-# Place this file inside the `ollama/` service directory in Railway.
+# railway.toml — Ollama service
 
 [build]
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "ollama serve"
-# Ollama is ready when /api/tags returns 200
+# Ollama needs time to initialise its HTTP server before the health check fires.
+# healthcheckTimeout is how long Railway waits total for the service to become healthy.
 healthcheckPath = "/api/tags"
-# Give extra time — Ollama can take a moment to initialise
 healthcheckTimeout = 120
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
