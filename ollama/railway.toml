@@ -1,12 +1,12 @@
 # railway.toml — Ollama service
-# Explicitly force Dockerfile builder so Railpack never runs.
+# No healthcheck — Ollama binds on its own internal port (11434) and is
+# accessed by the Flask backend over Railway's private network.
+# The Flask entrypoint.sh handles waiting for Ollama to be ready.
 
 [build]
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-healthcheckPath = "/api/tags"
-healthcheckTimeout = 120
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
