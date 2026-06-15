@@ -1,12 +1,11 @@
 # railway.toml — Ollama service
+# Explicitly force Dockerfile builder so Railpack never runs.
 
 [build]
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# Ollama needs time to initialise its HTTP server before the health check fires.
-# healthcheckTimeout is how long Railway waits total for the service to become healthy.
 healthcheckPath = "/api/tags"
 healthcheckTimeout = 120
 restartPolicyType = "on_failure"
